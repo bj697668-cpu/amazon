@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Amazon Clone - Single File</title>
+    <title>Amazon Clone - Interactive Prototype</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -16,6 +16,9 @@
 
         body {
             background-color: #e3e6e6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
         }
 
         /* Navbar Styling */
@@ -25,20 +28,25 @@
             color: white;
             display: flex;
             align-items: center;
-            justify-content: space-evenly;
+            justify-content: space-between;
+            padding: 0 20px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .nav-logo h2 {
             color: white;
-            padding: 10px;
             cursor: pointer;
+            font-size: 1.4rem;
         }
 
         /* Search Bar */
         .nav-search {
             display: flex;
-            justify-content: space-evenly;
-            width: 600px;
+            flex: 1;
+            max-width: 700px;
+            margin: 0 20px;
             height: 40px;
             border-radius: 4px;
             overflow: hidden;
@@ -46,16 +54,19 @@
 
         .search-select {
             background-color: #f3f3f3;
-            width: 50px;
+            width: 60px;
             text-align: center;
             border: none;
+            border-right: 1px solid #ddd;
+            cursor: pointer;
         }
 
         .search-input {
-            width: 100%;
+            flex: 1;
             font-size: 1rem;
             border: none;
-            padding-left: 10px;
+            padding-left: 15px;
+            outline: none;
         }
 
         .search-icon {
@@ -67,16 +78,23 @@
             background-color: #febd68;
             color: #0f1111;
             cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-icon:hover {
+            background-color: #f3a847;
         }
 
         /* Navbar Options */
         .nav-options {
             display: flex;
-            gap: 15px;
+            gap: 20px;
+            align-items: center;
         }
 
         .nav-text p {
             font-size: 0.75rem;
+            color: #ccc;
         }
 
         .nav-text h3 {
@@ -84,17 +102,29 @@
             font-weight: 700;
         }
 
-        .nav-cart i {
-            font-size: 1.5rem;
-        }
-
         .nav-cart {
             display: flex;
             align-items: center;
             gap: 5px;
-            font-size: 0.85rem;
-            font-weight: 700;
             cursor: pointer;
+            position: relative;
+            padding: 5px;
+        }
+
+        .nav-cart i {
+            font-size: 1.6rem;
+        }
+
+        #cart-count {
+            position: absolute;
+            top: -2px;
+            left: 15px;
+            background-color: #f3a847;
+            color: #0f1111;
+            border-radius: 50%;
+            padding: 1px 6px;
+            font-size: 0.75rem;
+            font-weight: bold;
         }
 
         /* Sub Navigation */
@@ -116,13 +146,15 @@
 
         .panel-ops p {
             cursor: pointer;
+            hover: opacity: 0.8;
         }
 
         /* Hero Section */
         .hero-section {
-            background-image: url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
+            background-image: linear-gradient(to bottom, rgba(0,0,0,0.3), rgba(227,230,230,1)), url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80');
             background-size: cover;
-            height: 350px;
+            background-position: center;
+            height: 380px;
             display: flex;
             justify-content: center;
             align-items: flex-end;
@@ -131,65 +163,155 @@
         .hero-msg {
             background-color: white;
             color: black;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 12px;
+            text-align: center;
             font-size: 0.85rem;
             width: 90%;
             margin-bottom: 25px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
 
         .hero-msg a {
             color: #007185;
             text-decoration: none;
-            margin-left: 5px;
-            cursor: pointer;
+            font-weight: bold;
         }
 
         /* Shop Section (Product Grid) */
         .shop-section {
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-evenly;
-            background-color: #e3e6e6;
-            padding: 20px 0;
+            justify-content: flex-start;
+            gap: 20px;
+            max-width: 1200px;
+            margin: -60px auto 40px auto;
+            padding: 0 20px;
+            z-index: 2;
         }
 
         .box {
-            height: 350px;
-            width: 23%;
             background-color: white;
-            padding: 20px 0px 15px;
-            margin-bottom: 20px;
-        }
-
-        .box-content {
-            margin-left: 1rem;
-            margin-right: 1rem;
+            padding: 20px;
+            width: calc(25% - 15px);
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border-radius: 2px;
         }
 
         .box-content h2 {
             font-size: 1.1rem;
             margin-bottom: 10px;
+            height: 50px;
+            overflow: hidden;
         }
 
         .box-img {
-            height: 250px;
-            background-size: cover;
+            height: 200px;
+            background-size: contain;
+            background-repeat: no-repeat;
             background-position: center;
             margin-bottom: 1rem;
         }
 
-        .box-content p {
-            color: #007185;
+        .price-tag {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #b12704;
+        }
+
+        .add-to-cart-btn {
+            background-color: #ffd814;
+            border: 1px solid #fcd200;
+            border-radius: 20px;
+            padding: 8px;
+            cursor: pointer;
+            text-align: center;
             font-size: 0.85rem;
+            width: 100%;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+
+        .add-to-cart-btn:hover {
+            background-color: #f7ca00;
+        }
+
+        /* Cart Modal Sidebar */
+        .cart-sidebar {
+            position: fixed;
+            top: 0;
+            right: -350px;
+            width: 320px;
+            height: 100%;
+            background-color: white;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.2);
+            z-index: 101;
+            transition: right 0.3s ease;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-sidebar.active {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .close-cart {
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .cart-items-container {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+
+        .cart-total-section {
+            border-top: 1px solid #ddd;
+            padding-top: 15px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .checkout-btn {
+            background-color: #ffd814;
+            border: 1px solid #fcd200;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+            font-weight: bold;
             cursor: pointer;
         }
 
         /* Footer */
         footer {
-            margin-top: 15px;
+            margin-top: auto;
         }
 
         .foot-panel1 {
@@ -206,11 +328,19 @@
         .foot-panel2 {
             background-color: #232f3e;
             color: white;
-            height: 60px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            padding: 20px 0;
+            text-align: center;
             font-size: 0.8rem;
+        }
+
+        /* Responsive styling */
+        @media (max-width: 900px) {
+            .box { width: calc(50% - 10px); }
+            .nav-search { max-width: 300px; }
+        }
+        @media (max-width: 600px) {
+            .box { width: 100%; }
+            .nav-search { display: none; }
         }
     </style>
 </head>
@@ -222,13 +352,9 @@
         </div>
         
         <div class="nav-search">
-            <select class="search-select">
-                <option>All</option>
-            </select>
-            <input type="text" placeholder="Search Amazon Clone" class="search-input">
-            <div class="search-icon">
-                <i class="fa-solid fa-magnifying-glass"></i>
-            </div>
+            <select class="search-select"><option>All</option></select>
+            <input type="text" id="search-bar" placeholder="Search Amazon Clone products..." class="search-input">
+            <div class="search-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
         </div>
 
         <div class="nav-options">
@@ -236,21 +362,16 @@
                 <p>Hello, Sign in</p>
                 <h3>Account & Lists</h3>
             </div>
-            <div class="nav-text">
-                <p>Returns</p>
-                <h3>& Orders</h3>
-            </div>
-            <div class="nav-cart">
+            <div class="nav-cart" id="cart-toggle">
                 <i class="fa-solid fa-cart-shopping"></i>
+                <span id="cart-count">0</span>
                 <h3>Cart</h3>
             </div>
         </div>
     </header>
 
     <div class="panel">
-        <div class="panel-all">
-            <i class="fa-solid fa-bars"></i> All
-        </div>
+        <div class="panel-all"><i class="fa-solid fa-bars"></i> All</div>
         <div class="panel-ops">
             <p>Today's Deals</p>
             <p>Customer Service</p>
@@ -262,49 +383,127 @@
 
     <main class="hero-section">
         <div class="hero-msg">
-            <p>You are on amazonclone.com. You can also shop for millions of items with fast local delivery. <a>Click here to go to amazon.com</a></p>
+            <p>You are on an interactive amazonclone.com frontend framework. <a>Click here to explore premium shipping features.</a></p>
         </div>
     </main>
 
-    <section class="shop-section">
-        <div class="box">
-            <div class="box-content">
-                <h2>Gaming Accessories</h2>
-                <div class="box-img" style="background-image: url('https://images.unsplash.com/photo-1593640408182-31c70c8268f5?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60');"></div>
-                <p>See more</p>
-            </div>
+    <section class="shop-section" id="product-grid">
+        </section>
+
+    <div class="cart-sidebar" id="cart-sidebar">
+        <div class="cart-header">
+            <h2>Your Shopping Cart</h2>
+            <span class="close-cart" id="close-cart">&times;</span>
         </div>
-        <div class="box">
-            <div class="box-content">
-                <h2>Laptops & Tablets</h2>
-                <div class="box-img" style="background-image: url('https://images.unsplash.com/photo-1531297172820-f0a1ce481420?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60');"></div>
-                <p>See more</p>
+        <div class="cart-items-container" id="cart-items-container">
             </div>
+        <div class="cart-total-section">
+            <span>Total:</span>
+            <span id="cart-total-price">$0.00</span>
         </div>
-        <div class="box">
-            <div class="box-content">
-                <h2>Smartwatches</h2>
-                <div class="box-img" style="background-image: url('https://images.unsplash.com/photo-1579586337278-3befd40fd17a?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60');"></div>
-                <p>See more</p>
-            </div>
-        </div>
-        <div class="box">
-            <div class="box-content">
-                <h2>Fitness Gear</h2>
-                <div class="box-img" style="background-image: url('https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?ixlib=rb-4.0.3&auto=format&fit=crop&w=500&q=60');"></div>
-                <p>See more</p>
-            </div>
-        </div>
-    </section>
+        <button class="checkout-btn" onclick="alert('Proceeding to integrated mock checkout sequence...')">Proceed to Checkout</button>
+    </div>
 
     <footer>
-        <div class="foot-panel1">
-            Back to top
-        </div>
+        <div class="foot-panel1" onclick="window.scrollTo({top: 0, behavior: 'smooth'});">Back to top</div>
         <div class="foot-panel2">
-            <p>&copy; 2026, Amazon Clone Project. For educational purposes only.</p>
+            <p>&copy; 2026, Amazon Clone Project. Production Grade Frontend Optimization Lab.</p>
         </div>
     </footer>
 
+    <script>
+        // Production Mock Dataset Injection
+        const products = [
+            { id: 1, title: "Pro Gaming Mechanical Keyboard", price: 89.99, img: "https://images.unsplash.com/photo-1593640408182-31c70c8268f5?auto=format&fit=crop&w=500&q=60" },
+            { id: 2, title: "Ultrabook Laptop 14-Inch", price: 749.99, img: "https://images.unsplash.com/photo-1531297172820-f0a1ce481420?auto=format&fit=crop&w=500&q=60" },
+            { id: 3, title: "Fitness Smartwatch Series 5", price: 199.99, img: "https://images.unsplash.com/photo-1579586337278-3befd40fd17a?auto=format&fit=crop&w=500&q=60" },
+            { id: 4, title: "Adjustable Cast Iron Dumbbells", price: 124.50, img: "https://images.unsplash.com/photo-1584735935682-2f2b69dff9d2?auto=format&fit=crop&w=500&q=60" }
+        ];
+
+        let cart = [];
+
+        // DOM Elements
+        const productGrid = document.getElementById('product-grid');
+        const searchBar = document.getElementById('search-bar');
+        const cartToggle = document.getElementById('cart-toggle');
+        const cartSidebar = document.getElementById('cart-sidebar');
+        const closeCart = document.getElementById('close-cart');
+        const cartItemsContainer = document.getElementById('cart-items-container');
+        const cartCount = document.getElementById('cart-count');
+        const cartTotalPrice = document.getElementById('cart-total-price');
+
+        // Render Products to Screen
+        function renderProducts(productsToRender) {
+            productGrid.innerHTML = '';
+            if(productsToRender.length === 0) {
+                productGrid.innerHTML = `<p style="padding: 20px; background: white; width: 100%;">No items matched your search criteria.</p>`;
+                return;
+            }
+            productsToRender.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.classList.add('box');
+                productElement.innerHTML = `
+                    <div class="box-content">
+                        <h2>${product.title}</h2>
+                        <div class="box-img" style="background-image: url('${product.img}');"></div>
+                        <div class="price-tag">$${product.price.toFixed(2)}</div>
+                        <button class="add-to-cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                    </div>
+                `;
+                productGrid.appendChild(productElement);
+            });
+        }
+
+        // Live Filtering System
+        searchBar.addEventListener('input', (e) => {
+            const keyword = e.target.value.toLowerCase();
+            const filtered = products.filter(p => p.title.toLowerCase().includes(keyword));
+            renderProducts(filtered);
+        });
+
+        // Cart State Transitions
+        function addToCart(id) {
+            const targetProduct = products.find(p => p.id === id);
+            cart.push(targetProduct);
+            updateCartUI();
+        }
+
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            updateCartUI();
+        }
+
+        function updateCartUI() {
+            // Count update
+            cartCount.innerText = cart.length;
+            
+            // List rendering
+            cartItemsContainer.innerHTML = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                total += item.price;
+                const itemRow = document.createElement('div');
+                itemRow.classList.add('cart-item');
+                itemRow.innerHTML = `
+                    <span>${item.title}</span>
+                    <div>
+                        <strong>$${item.price.toFixed(2)}</strong>
+                        <i class="fa-solid fa-trash" style="color: #b12704; margin-left: 10px; cursor: pointer;" onclick="removeFromCart(${index})"></i>
+                    </div>
+                `;
+                cartItemsContainer.appendChild(itemRow);
+            });
+            
+            cartTotalPrice.innerText = `$${total.toFixed(2)}`;
+        }
+
+        // Sidebar Visibility Event Listeners
+        cartToggle.addEventListener('click', () => cartSidebar.classList.add('active'));
+        closeCart.addEventListener('click', () => cartSidebar.classList.remove('active'));
+
+        // Initialize App View
+        renderProducts(products);
+    </script>
 </body>
 </html>
